@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>My Claims - ClaimGuard</title>
+
+    <link rel="stylesheet" href="css/claims.css">
+
+</head>
+
+
+<body>
+
+    <div class="claims-container">
+
+        <h1>ClaimGuard</h1>
+
+        <h2>My Claims</h2>
+
+
+        <button onclick="loadClaims()">
+            View Claims
+        </button>
+
+
+        <div id="claims">
+
+        </div>
+
+
+        <button
+            class="back-button"
+            onclick="goBack()"
+        >
+            Back to Dashboard
+        </button>
+
+    </div>
+
+
+    <script>
+
+        function loadClaims() {
+
+            fetch("http://127.0.0.1:8000/claims/")
+
+            .then(function(response) {
+
+                return response.json();
+
+            })
+
+            .then(function(data) {
+
+                console.log(data);
+
+                let output = "";
+
+                if (data.length === 0) {
+
+                    output = "<p>No claims found.</p>";
+
+                }
+
+                for (let i = 0; i < data.length; i++) {
+
+                    output += `
+
+                        <div class="claim-card">
+
+                            <h3>
+                                Claim ${data[i].claim_number}
+                            </h3>
+
+                            <p>
+                                <b>Claim Amount:</b>
+                                ₹${data[i].claim_amount}
+                            </p>
+
+                            <p>
+                                <b>Status:</b>
+                                ${data[i].status}
+                            </p>
+
+                            <p>
+                                <b>Fraud Score:</b>
+                                ${data[i].fraud_score}
+                            </p>
+
+                        </div>
+
+                    `;
+
+                }
+
+                document.getElementById("claims").innerHTML = output;
+
+            })
+
+            .catch(function(error) {
+
+                console.log(error);
+
+                alert("Cannot connect to ClaimGuard server.");
+
+            });
+
+        }
+
+
+        function goBack() {
+
+            window.location.href = "dashboard.html";
+
+        }
+
+
+        // Automatically load claims when page opens
+
+        loadClaims();
+
+    </script>
+
+</body>
+
+</html>

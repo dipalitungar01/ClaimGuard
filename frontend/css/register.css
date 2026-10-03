@@ -1,0 +1,140 @@
+/* Page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f6fc;
+}
+
+
+/* Main box */
+.container {
+    width: 350px;
+    margin: 80px auto;
+    padding: 25px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Main heading */
+h1 {
+    text-align: center;
+    color: #2563eb;
+}
+
+
+/* Register heading */
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+
+/* Labels */
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+
+/* Input boxes */
+input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+/* Password box */
+.password-box {
+    display: flex;
+    align-items: center;
+}
+
+.password-box input {
+    width: 100%;
+}
+
+.eye-button {
+    width: 45px;
+    height: 40px;
+
+    margin-left: -45px;
+
+    border: none;
+    background-color: transparent;
+
+    cursor: pointer;
+    color: #777;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.eye-button:hover {
+    color:black;
+}
+
+.eye-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Register button */
+form > button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+
+    background-color: #2563eb;
+    color: white;
+
+    border: none;
+    border-radius: 5px;
+
+    cursor: pointer;
+}
+
+
+/* Register button when mouse is over it */
+form > button:hover {
+    background-color: #1d4ed8;
+}
+
+.forgot-password {
+
+    text-align: right;
+
+    margin-top: 10px;
+
+    margin-bottom: 0;
+
+}
+
+
+.forgot-password a {
+
+    color: #2563eb;
+
+    text-decoration: none;
+
+}
+
+
+/* Login paragraph */
+p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+/* Login link */
+a {
+    color: #2563eb;
+    text-decoration: none;
+}

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Submit Claim - ClaimGuard</title>
+
+    <link rel="stylesheet" href="css/claim.css">
+
+</head>
+
+
+<body>
+
+
+    <div class="claim-container">
+
+
+        <h1>ClaimGuard</h1>
+
+        <h2>Submit New Claim</h2>
+
+
+        <!-- Claim Number -->
+
+        <label>Claim Number</label>
+
+        <input
+            type="text"
+            id="claim_number"
+            placeholder="Example: CLM010"
+        >
+
+
+        <!-- Claim Amount -->
+
+        <label>Claim Amount</label>
+
+        <input
+            type="number"
+            id="claim_amount"
+            placeholder="Enter claim amount"
+        >
+
+
+        <!-- Submit Button -->
+
+        <button onclick="submitClaim()">
+
+            Submit Claim
+
+        </button>
+
+
+        <!-- Result -->
+
+        <div
+            id="result"
+            class="result"
+        >
+
+        </div>
+
+
+        <!-- Back Button -->
+
+        <button
+            class="back-button"
+            onclick="goBack()"
+        >
+
+            Back to Dashboard
+
+        </button>
+
+
+    </div>
+
+
+   <script>
+
+    function submitClaim() {
+
+        let claimNumber =
+            document.getElementById("claim_number").value;
+
+        let claimAmount =
+            document.getElementById("claim_amount").value;
+
+
+        // Check empty fields
+
+        if (claimNumber === "" || claimAmount === "") {
+
+            alert("Please fill all fields");
+
+            return;
+        }
+
+
+        // Send data to FastAPI
+
+        fetch("http://127.0.0.1:8000/claims/", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                claim_number: claimNumber,
+
+                claim_amount: Number(claimAmount)
+
+            })
+
+        })
+
+
+        .then(function(response) {
+
+            return response.json();
+
+        })
+
+
+        .then(function(data) {
+
+            console.log(data);
+
+
+            // If backend gives an error
+
+           if (data.detail) {
+
+              alert(data.detail);
+
+              return;
+      }
+
+
+            // Successful claim
+
+            document.getElementById("result").innerHTML = `
+
+                <h3>Claim Submitted Successfully!</h3>
+
+                <p>
+                    <b>Claim Number:</b>
+                    ${data.claim_number}
+                </p>
+
+                <p>
+                    <b>Claim Amount:</b>
+                    ₹${data.claim_amount}
+                </p>
+
+                <p>
+                    <b>Status:</b>
+                    ${data.status}
+                </p>
+
+                <p>
+                    <b>Fraud Score:</b>
+                    ${data.fraud_score}
+                </p>
+
+            `;
+
+        })
+
+
+        .catch(function(error) {
+
+            console.log(error);
+
+            alert(
+                "Claim number " + claimNumber +
+                " already exists. Please enter a different claim number."
+           );
+
+   });
+
+    }
+
+
+    // Back to dashboard
+
+    function goBack() {
+
+        window.location.href = "dashboard.html";
+
+    }
+
+</script>
+</body>
+</html>

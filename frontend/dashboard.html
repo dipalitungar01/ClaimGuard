@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>ClaimGuard Dashboard</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- Header -->
+
+        <div class="dashboard-header">
+
+            <h1>ClaimGuard</h1>
+
+            <p>Intelligent Insurance Claim Fraud Detection and Risk Analysis</p>
+
+        
+        </div>
+
+
+        <!-- Welcome -->
+
+        <div class="welcome">
+
+            <h2>Dashboard</h2>
+
+            <p>Monitor your insurance claims and risk status.</p>
+
+        </div>
+
+
+        <!-- Statistics -->
+
+        <div class="cards">
+
+            <div class="card total-card">
+
+                <h3>Total Claims</h3>
+
+                <p id="totalClaims">0</p>
+
+            </div>
+
+
+            <div class="card pending-card">
+
+                <h3>Pending Claims</h3>
+
+                <p id="pendingClaims">0</p>
+
+            </div>
+
+
+            <div class="card risk-card">
+
+                <h3>High Risk Claims</h3>
+
+                <p id="highRiskClaims">0</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Actions -->
+
+        <div class="actions">
+
+            <button onclick="goToClaimPage()">
+
+                Submit New Claim
+
+            </button>
+
+
+            <button onclick="goToClaimsPage()" class="secondary-button">
+
+                View My Claims
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+    <script>
+
+        function goToClaimPage() {
+
+            window.location.href = "claim.html";
+
+        }
+
+
+        function goToClaimsPage() {
+
+            window.location.href = "claims.html";
+
+        }
+
+
+        function loadDashboard() {
+
+            fetch("http://127.0.0.1:8000/claims/")
+
+                .then(function(response) {
+
+                    return response.json();
+
+                })
+
+                .then(function(claims) {
+
+                    let total = claims.length;
+
+                    let pending = 0;
+
+                    let highRisk = 0;
+
+
+                    claims.forEach(function(claim) {
+
+                        if (claim.status === "pending") {
+
+                            pending++;
+
+                        }
+
+
+                        if (claim.status === "high risk") {
+
+                            highRisk++;
+
+                        }
+
+                    });
+
+
+                    document.getElementById("totalClaims").innerText = total;
+
+                    document.getElementById("pendingClaims").innerText = pending;
+
+                    document.getElementById("highRiskClaims").innerText = highRisk;
+
+                })
+
+                .catch(function(error) {
+
+                    console.log(error);
+
+                    alert("Cannot connect to ClaimGuard server.");
+
+                });
+
+        }
+
+
+        loadDashboard();
+
+    </script>
+
+
+</body>
+
+</html>
