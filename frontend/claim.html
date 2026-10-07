@@ -77,125 +77,145 @@
     </div>
 
 
-   <script>
+    <script>
 
-    function submitClaim() {
+        function submitClaim() {
 
-        let claimNumber =
-            document.getElementById("claim_number").value;
+            let claimNumber =
+                document.getElementById("claim_number").value.trim();
 
-        let claimAmount =
-            document.getElementById("claim_amount").value;
-
-
-        // Check empty fields
-
-        if (claimNumber === "" || claimAmount === "") {
-
-            alert("Please fill all fields");
-
-            return;
-        }
+            let claimAmount =
+                document.getElementById("claim_amount").value;
 
 
-        // Send data to FastAPI
+            // Check empty fields
 
-        fetch("http://127.0.0.1:8000/claims/", {
+            if (claimNumber === "" || claimAmount === "") {
 
-            method: "POST",
+                alert("Please fill all fields");
 
-            headers: {
+                return;
 
-                "Content-Type": "application/json"
+            }
 
-            },
 
-            body: JSON.stringify({
+            // Check claim amount
 
-                claim_number: claimNumber,
+            if (Number(claimAmount) <= 0) {
 
-                claim_amount: Number(claimAmount)
+                alert("Claim amount must be greater than 0");
+
+                return;
+
+            }
+
+
+            // Send data to FastAPI
+
+            fetch("http://127.0.0.1:8000/claims/", {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                body: JSON.stringify({
+
+                    claim_number: claimNumber,
+
+                    claim_amount: Number(claimAmount)
+
+                })
 
             })
 
-        })
+
+            .then(function(response) {
+
+                return response.json();
+
+            })
 
 
-        .then(function(response) {
+            .then(function(data) {
 
-            return response.json();
-
-        })
+                console.log(data);
 
 
-        .then(function(data) {
+                // Backend error
 
-            console.log(data);
+                if (data.detail) {
 
+                    alert(data.detail);
 
-            // If backend gives an error
+                    return;
 
-           if (data.detail) {
-
-              alert(data.detail);
-
-              return;
-      }
+                }
 
 
-            // Successful claim
+                // Successful claim
 
-            document.getElementById("result").innerHTML = `
+                document.getElementById("result").innerHTML = `
 
-                <h3>Claim Submitted Successfully!</h3>
+                    <h3>Claim Submitted Successfully!</h3>
 
-                <p>
-                    <b>Claim Number:</b>
-                    ${data.claim_number}
-                </p>
+                    <p>
+                        <b>Claim Number:</b>
+                        ${data.claim_number}
+                    </p>
 
-                <p>
-                    <b>Claim Amount:</b>
-                    ₹${data.claim_amount}
-                </p>
+                    <p>
+                        <b>Claim Amount:</b>
+                        ₹${data.claim_amount}
+                    </p>
 
-                <p>
-                    <b>Status:</b>
-                    ${data.status}
-                </p>
+                    <p>
+                        <b>Claim Status:</b>
+                        ${data.status}
+                    </p>
 
-                <p>
-                    <b>Fraud Score:</b>
-                    ${data.fraud_score}
-                </p>
+                    <p>
+                        <b>Fraud Score:</b>
+                        ${data.fraud_score} / 100
+                    </p>
 
-            `;
+                    <p>
+                        <b>Risk Level:</b>
+                        ${data.risk_level}
+                    </p>
 
-        })
+                `;
 
-
-        .catch(function(error) {
-
-            console.log(error);
-
-            alert(
-                "Claim number " + claimNumber +
-                " already exists. Please enter a different claim number."
-           );
-
-   });
-
-    }
+            })
 
 
-    // Back to dashboard
+            .catch(function(error) {
 
-    function goBack() {
+                console.log(error);
 
-        window.location.href = "dashboard.html";
+                alert(
+                    "Unable to connect to ClaimGuard server."
+                );
 
-    }
+            });
 
-</script>
+        }
+
+
+        // Back to dashboard
+
+        function goBack() {
+
+            window.location.href = "dashboard.html";
+
+        }
+
+    </script>
+
+
 </body>
+
 </html>
